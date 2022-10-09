@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 
 function App() {
   const [photos, setPhotos] = useState([])
+  const [cartItems, setCartItems] = useState([])
 
   useEffect(() => {
     fetch(
@@ -16,10 +17,34 @@ function App() {
       .then((data) => setPhotos(data))
   }, [])
 
+  function toggleFavorite(id) {
+    const updatedArr = photos.map((photo) => {
+      if (photo.id === id) {
+        console.log(id)
+        console.log(!photo.isFavorite)
+
+        return { ...photo, isFavorite: !photo.isFavorite }
+      }
+      return photo
+    })
+
+    setPhotos(updatedArr)
+  }
+
+  const addToCart = (newItem) => {
+    setCartItems((prevItems) => [...prevItems, newItem])
+  }
+
+  const removeItem = (id) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id))
+  }
+
   return (
     <>
-      <Header />
-      <userContext.Provider value={{ photos }}>
+      <userContext.Provider
+        value={{ photos, toggleFavorite, addToCart, cartItems, removeItem }}
+      >
+        <Header />
         <Routes>
           <Route path='/' element={<Photos />} />
           <Route path='/cart' element={<Cart />} />
