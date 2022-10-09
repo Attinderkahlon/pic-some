@@ -1,10 +1,12 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
+import useHover from '../hooks/useHover'
+
 import PropTypes from 'prop-types'
 
 import userContext from '../Context'
 
 const Image = ({ className, img }) => {
-  const [hover, setHover] = useState(false)
+  const [hovered, ref] = useHover()
   const { toggleFavorite, addToCart, cartItems, removeItem } =
     useContext(userContext)
 
@@ -16,7 +18,7 @@ const Image = ({ className, img }) => {
           onClick={() => toggleFavorite(img.id)}
         ></i>
       )
-    } else if (hover) {
+    } else if (hovered) {
       return (
         <i
           className='ri-heart-line favorite'
@@ -35,7 +37,7 @@ const Image = ({ className, img }) => {
           onClick={() => removeItem(img.id)}
         ></i>
       )
-    } else if (hover) {
+    } else if (hovered) {
       return (
         <i
           className='ri-add-circle-line cart'
@@ -46,11 +48,7 @@ const Image = ({ className, img }) => {
   }
 
   return (
-    <div
-      className={`${className} image-container`}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-    >
+    <div className={`${className} image-container`} ref={ref}>
       <img src={img.url} alt='photos' className='image-grid' />
       {heartIcon()}
       {cartIcon()}

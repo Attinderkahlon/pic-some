@@ -35,14 +35,25 @@ function App() {
     setCartItems((prevItems) => [...prevItems, newItem])
   }
 
-  const removeItem = (id) => {
+  function removeItem(id) {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== id))
+  }
+
+  const emptyCart = () => {
+    setCartItems([])
   }
 
   return (
     <>
       <userContext.Provider
-        value={{ photos, toggleFavorite, addToCart, cartItems, removeItem }}
+        value={{
+          photos,
+          toggleFavorite,
+          addToCart,
+          cartItems,
+          removeItem,
+          emptyCart,
+        }}
       >
         <Header />
         <Routes>
